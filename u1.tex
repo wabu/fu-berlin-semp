@@ -23,10 +23,21 @@ C &:==& \text{skip} | I:=T | \text{$C_1$; $C_2$} | \text{if $B$ then $C_1$ else 
 \end{eqnarray}
 
 \section*{Aufgabe 2}
-<+ TODO: was is gemeint +>
+\begin{eqnarray}
+Z &:==& 0 | 1 | 2 | \cdots | -1 | -2 | \cdots \\
+W &:==& \text{true} | \text{false} \\
+K &:==& Z | R | W \\
+I &:==& a | b | \cdots | Z | a_1 | a_2 | \cdots \\
+OP &:==& + | - | * | ÷ | \mod \\
+BOP &:==& = | < | > | \leq | \cdots \\
+T &:==& Z | R | I | (T_1 OP T_2) | \text{read} \\
+B &:==& W | (\text{not $B$}) | (\text{$T_1$ $BOP$ $T_2$})  | \text{read}\\
+C &:==& \text{skip} | I:=T | \text{$C_1$; $C_2$} | \text{if $B$ then $C_1$ else $C_2$ fi} | 
+        \text{while $B$ do $C$ done} | \text{output $T$} | \text{output $B$}
+\end{eqnarray}
 
 \section*{Aufgabe 3}
-<+ TODO: ist das so gemeint+>
+Folgende Regeln werden zur Auswertung eines WHILE-Programmes benutzt:
 \begin{itemize}
 \item bei $Z, R$ und $W$ werden als entsprechende zahlen ausgewertet, wobei true 1 und false 0 ist
 \item fuer jeden Bezeichner im programm wird eine Speicheradresse festgelegt
