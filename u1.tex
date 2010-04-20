@@ -14,7 +14,7 @@ R &:==& Z . N \\
 W &:==& \text{true} | \text{false} \\
 K &:==& Z | R | W \\
 I &:==& a | b | \cdots | Z | a_1 | a_2 | \cdots \\
-OP &:==& + | - | * | ÷ \\
+OP &:==& + | - | * | ÷ | \mod \\
 BOP &:==& = | < | > | \leq | \cdots \\
 T &:==& Z | R | I | T_1 OP T_2 | \text{read} \\
 B &:==& W | \text{not $B$} | \text{$T_1$ $BOP$ $T_2$}  | \text{read}\\
@@ -26,5 +26,18 @@ C &:==& \text{skip} | I:=T | \text{$C_1$; $C_2$} | \text{if $B$ then $C_1$ else 
 <+ TODO: was is gemeint +>
 
 \section*{Aufgabe 3}
+<+ TODO: ist das so gemeint+>
+\begin{itemize}
+\item bei $Z, R$ und $W$ werden als entsprechende zahlen ausgewertet, wobei true 1 und false 0 ist
+\item fuer jeden Bezeichner im programm wird eine Speicheradresse festgelegt
+\item bei $I:=T$ wird der speicheradersse von $I$ das Ergebnis von $T$ zugeordnet
+\item das Ergebnis von $I$ ist der Wert an der Spechererstelle von $I$
+\item das Ergebnis von $T_1\>OP\>T>2$ wird die Operation auf das Ergebnis von $T_1$ und $T_2$ angewandt
+    \\ im falle einer Division von 0 oder einse Ueberlaufs bricht das Program mit einem Fehler ab
+\item read liest entsprechend der umgebung zahlen oder boolsche ausdrucke
+    \\ ist die eingabedatei leer, bricht das programm mit einem Fehler ab
+    \\ kann die eingabe nicht in eine Zahl umgeformt werden, oder wird ein boolscher ausdruck in einem read einer Zahl eingelesen,
+        bricht das programm mit einem Typfehler ab
+\end{itemize}
 
 \end{document}
