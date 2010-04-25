@@ -1,3 +1,4 @@
+-- Aufgabe 1
 type Z = Int
 type W = Bool
 type I = String
@@ -35,6 +36,7 @@ data K = KZ Z | KW W
     deriving (Eq, Show, Read)
 
 
+-- Aufgabe 2
 divprog :: C
 divprog = 
     ("x" ::=: ReadT) :.:
@@ -47,33 +49,40 @@ divprog =
     (OutputT (I "x"))
 
 
+-- Aufgabe 3
 type Input = [K]
 type Output = [K]
-type Speicher = [(I, Z)]
+type Memory = [(I, Z)]
 
-evalT :: T -> Speicher -> Input -> Z
+reduceT :: T -> (Z -> Z -> a) -> T -> Memory -> Input -> a
+reduceT t1 f t2 s i = f (evalT t1 s i) (evalT t2 s i)
+
+evalT :: T -> Memory -> Input -> Z
 evalT (Z z) _ _ = z
 evalT (I i) s _ = case lookup i s of
     Just z -> z
     Nothing -> error("free var " ++ i)
-evalT (t1 :+: t2) s i = (evalT t1 s i) + (evalT t2 s i)
-evalT (t1 :-: t2) s i = (evalT t1 s i) - (evalT t2 s i)
-evalT (t1 :*: t2) s i = (evalT t1 s i) * (evalT t2 s i)
-evalT (t1 :/: t2) s i = (evalT t1 s i) `div` (evalT t2 s i)
-evalT (t1 :%: t2) s i = (evalT t1 s i) `mod` (evalT t2 s i)
-evalT ReadT _ [] = error("segfault")
-evalT ReadT _ ((KZ z):_) = z
-evalT ReadT _ (i:_) = error("no number " ++ (show i))
+evalT (t1 :+: t2) s i = reduceT t1 (+) t2 s i
+evalT (t1 :-: t2) s i = reduceT t1 (-) t2 s i
+evalT (t1 :*: t2) s i = reduceT t1 (*) t2 s i
+evalT (t1 :/: t2) s i = reduceT t1 div t2 s i
+evalT (t1 :%: t2) s i = reduceT t1 mod t2 s i
+evalT ReadT _ is = case is of
+    (KZ z):_ -> z
+    i:_      -> error("not num " ++ (show i))
+    _        -> error("segfault")
 
-evalB :: B -> Speicher -> Input -> W
+evalB :: B -> Memory -> Input -> W
 evalB (W w) _ _ = w
 evalB (Not b) s i = not $ evalB b s i
-evalB (t1 :=: t2) s i = (evalT t1 s i) == (evalT t2 s i)
-evalB (t1 :<: t2) s i = (evalT t1 s i) < (evalT t2 s i)
-evalB (t1 :>: t2) s i = (evalT t1 s i) > (evalT t2 s i)
-evalB (t1 :<=: t2) s i = (evalT t1 s i) <= (evalT t2 s i)
-evalB (t1 :>=: t2) s i = (evalT t1 s i) >= (evalT t2 s i)
-evalB (t1 :/=: t2) s i = (evalT t1 s i) /= (evalT t2 s i)
-evalB ReadB _ [] = error("segfault")
-evalB ReadB _ ((KW w):_) = w
-evalB ReadB _ (i:_) = error("no bool " ++ (show i))
+evalB (t1 :=: t2) s i = reduceT t1 (==) t2 s i
+evalB (t1 :<: t2) s i = reduceT t1 (<) t2 s i
+evalB (t1 :>: t2) s i = reduceT t1 (>) t2 s i
+evalB (t1 :<=: t2) s i = reduceT t1 (<=) t2 s i
+evalB (t1 :>=: t2) s i = reduceT t1 (>=) t2 s i
+evalB (t1 :/=: t2) s i = reduceT t1 (/=) t2 s i
+evalB ReadB _ is = case is of
+    (KW w):_ -> w
+    i:_      -> error("not bool " ++ (show i))
+    _        -> error("segfault")
+
