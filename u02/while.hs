@@ -18,6 +18,12 @@ data T
     | T :%: T
     | ReadT
     deriving (Eq, Show, Read)
+infixl 5 :+:
+infixl 5 :-:
+infixl 6 :*:
+infixl 6 :/:
+infixl 6 :%:
+
 
 data B 
     = W W   -- wahreithswert
@@ -30,6 +36,12 @@ data B
     | T :/=: T
     | ReadB
     deriving (Eq, Show, Read)
+infix 2 :=:
+infix 2 :<:
+infix 2 :>:
+infix 2 :<=:
+infix 2 :>=:
+infix 2 :/=:
 
 data C = Skip 
     | I ::=: T  -- :=
@@ -39,33 +51,39 @@ data C = Skip
     | OutputB B
     | OutputT T
     deriving (Eq, Show, Read)
+infixr 0 :.:
+infix 1 ::=:
 
-data K = K Z | B W
+data K = KW W | KZ Z
     deriving (Eq, Show, Read)
 
 
 ---------------
 -- Aufgabe 2 --
 ---------------
-    -- ugly syntax
+    -- ok a litte to many : and () instead of do end in while loop, 
+    -- but otherwise almost like the original grammer
 
 divprog :: C
 divprog = 
-    ("x" ::=: ReadT) :.:
-    ("y" ::=: ReadT) :.:
-    ("g" ::=: Z(0)) :.:
-    (While ((I "x") :>=: (I "y"))
-        (("g" ::=: ((I "g") :+: (Z 1))) :.:
-         ("x" ::=: ((I "x") :-: (I "y"))))) :.:
-    (OutputT (I "g")) :.:
-    (OutputT (I "x"))
+    "x" ::=: ReadT:.:
+    "y" ::=: ReadT:.:
+    "g" ::=: Z 0:.:
+    While (I"x" :>=: I"y") (
+        "g" ::=: I"g" :+: Z 1:.:
+        "x" ::=: I"x" :-: I"y"
+    ):.:
+    OutputT(I"g"):.:
+    OutputT(I"x")
 
 
 ---------------
 -- Aufgabe 3 --
 ---------------
-    -- see book 41f: only haskell notation
-    -- eval? gets a ? and the current state and returns the value of ? and the next state
+    -- same as in book 41f, only haskell notation
+    -- evalX gets an expression of type X and the current state 
+    --   and returns the value of the expression and the next state
+    --
     -- EXMAPLE eval' divprog [20, 3]
     -- TODO use Error monand instead of error calls
 
@@ -74,12 +92,13 @@ type Output = [K]
 type Memory = [(I, Z)]
 
 type State = (Memory, Input, Output)
-type Out a = (a, State)
+type Out a = (a, State)     -- output of a computation with result type a
 
+    -- eval for terms
 evalT :: T -> State -> Out Z
 evalT (Z z) s = (z, s)
 evalT (I i) s@(m,_,_) = case lookup i m of
-    Just z -> (z,s)
+    Just z  -> (z,s)
     Nothing -> error("free var " ++ i)
 evalT (t1 :+: t2) s = applyT (+) t1 t2 s
 evalT (t1 :-: t2) s = applyT (-) t1 t2 s
@@ -87,16 +106,18 @@ evalT (t1 :*: t2) s = applyT (*) t1 t2 s
 evalT (t1 :/: t2) s = applyT div t1 t2 s
 evalT (t1 :%: t2) s = applyT mod t1 t2 s
 evalT ReadT (m,is,os) = case is of
-    (K z):is' -> (z, (m,is',os))
-    i:_      -> error("not num " ++ (show i))
-    _        -> error("segfault")
+    (KZ z):is' -> (z, (m,is',os))
+    i:_        -> error("not num " ++ (show i))
+    _          -> error("segfault")
 
+    -- applies a function f on the result of two term expressions
 applyT :: (Z -> Z -> a) -> T -> T -> State -> (a, State)
 applyT f t1 t2 s = (f a1 a2, s'')
     where (a1, s')  = evalT t1 s
           (a2, s'') = evalT t2 s'
 
 
+    -- eval for booleans
 evalB :: B -> State -> Out W
 evalB (W w) s = (w,s)
 evalB (Not b) s = (not w, s')
@@ -108,33 +129,54 @@ evalB (t1 :<=: t2) s = applyT (<=) t1 t2 s
 evalB (t1 :>=: t2) s = applyT (>=) t1 t2 s
 evalB (t1 :/=: t2) s = applyT (/=) t1 t2 s
 evalB ReadB (m,is,os) = case is of
-    (B z):is' -> (z, (m,is',os))
-    i:_      -> error("not bool " ++ (show i))
-    _        -> error("segfault")
+    (KW w):is' -> (w, (m,is',os))
+    i:_       -> error("not bool " ++ (show i))
+    _         -> error("segfault")
 
+
+    -- eval of commands, it has no output type only affects the state
+evalC :: C -> State -> Out ()
+    -- void output, just has a next state
 void :: State -> Out ()
 void = (,) ()
 
-evalC :: C -> State -> Out ()
+
+    -- nop
+evalC Skip s = void s
+
+    -- :=   append result of t to memory in i
 evalC (i ::=: t) s = void ((i,z):m, is, os)
     where (z, (m,is,os)) = evalT t s
+
+    -- ;    eval c2 with the resulting state of the evaluation of c1
 evalC (c1 :.: c2) s = evalC c2 s'
     where (_, s') = evalC c1 s
+
+    -- if   call ct or cf according to result of b
 evalC (If b ct cf) s = evalC (if w then ct else cf) s
     where (w, s') = evalB b s
+
+    -- whle if the result of b is true 
+    --          run while again with the state resulting from evaluation of the while block
+    --      otherwise just return next the state
 evalC while@(While b c) s = if w then evalC while s'' else void s'
     where (w, s') = evalB b s
           (_, s'')= evalC c s'
-evalC (OutputB b) s = void (m', is', (B w):os')
+
+    -- out  append the result to the output
+evalC (OutputB b) s = void (m', is', (KW w):os')
     where (w, (m',is',os')) = evalB b s
-evalC (OutputT t) s = void (m', is', (K z):os')
+evalC (OutputT t) s = void (m', is', (KZ z):os')
     where (z, (m',is',os')) = evalT t s
 
+    -- eval in new environment and return output
+eval :: C -> Input -> Output
 eval c is = reverse os
     where (_, (_,_,os)) = evalC c ([], is, [])
 
-eval' c = map unK . eval c . map K
-    where unK (K i) = i
+    -- eval with maped/unmaped number input/ouput to Konst expressions
+eval' c = map unK . eval c . map KZ
+    where unK (KZ i) = i
 
 ---------------
 -- Aufgabe 4 --
@@ -157,7 +199,7 @@ data Inst
     | Jump Label    -- jump to label 
     deriving Show
 
-genLabel s = s
+genLabel s = s      -- TODO we sould return new labels, so loops could nest
 
     -- outputs reversed code so we can add instuctions with :
     -- so read from right to left :-P
