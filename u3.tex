@@ -1,0 +1,47 @@
+\include{headerueb}
+\include{header}
+\include{info}
+
+\newcommand{\op}{\underline{OP}}
+
+
+\newcommand{\nr}{3}
+
+\begin{document}
+\section*{Aufgabe 1}
+unter $1.$ wir veraendet
+\begin{enumerate}
+\item[] \ldots
+\item[(c')]
+    \begin{tabbing}
+    $\Delta$ \= $\langle W | S | T_1.\op.T_2.K | E | A \rangle :=$ \\
+             \> $\langle W | S | T_2.T_1.\op.K | E | A \rangle$
+    \end{tabbing}
+\item[(d')]
+    \begin{tabbing}
+    $\Delta$ \= $\langle             T_2.T_1.W | S | +.K | E | A \rangle :=$ \\
+             \> $\langle \underline{T_1+T_2}.W | S |   K | E | A \rangle$
+    \end{tabbing}
+\item[] \ldots
+\end{enumerate}
+
+\paragraph{Beispiel} $\langle \varepsilon | S_0 | \text{read} - \text{read} | 1.2.\varepsilon | \varepsilon \rangle$
+
+\section*{Aufgabe 2}
+<+ covin +>
+
+\section*{Aufgabe 3}
+anfuegen an $3.$
+\begin{enumerate}
+\item[] \ldots
+\item[(n)]
+    \begin{tabbing}
+    $\Delta$ \= $\langle W | S | \text{repeat } C \text{ until } B.K | E | A \rangle :=$ \\
+             \> $\langle W | S | C.\text{while }B \text{ do } C.K | E | A \rangle$
+    \end{tabbing}
+    hier kann nur die Kontrolle veraendert, dh. $\text{repeat}$ ist nur ,,syntatic sugar''
+\end{enumerate}
+
+\section*{Aufgabe 4}
+
+\end{document}
