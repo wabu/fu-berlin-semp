@@ -11,14 +11,6 @@ data Control
     | LNot
     | LOp (Int -> Int -> Bool)
     | Assign | Branch | Loop | Out
-    deriving Show
-
-instance Show (Int -> Int -> Int) where
-    show _ = ""
-instance Show (Int -> Int -> Bool) where
-    show _ = ""
-instance Show (Symbol -> Int) where
-    show _ = "mem"
 
 data Stack
     = V Int
