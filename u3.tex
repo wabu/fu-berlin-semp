@@ -28,7 +28,27 @@ unter $1.$ wir veraendet
 \paragraph{Beispiel} $\langle \varepsilon | S_0 | \text{read} - \text{read} | 1.2.\varepsilon | \varepsilon \rangle$
 
 \section*{Aufgabe 2}
-<+ covin +>
+\begin{enumerate}[(i)]
+\item Zustandsmenge:
+
+    erweiterung um eine komponente $N$ die entweder eine Nachricht oder $void$ enthalten kann
+\item Anfangszustand
+    
+    $\langle \varepsilon | S_0 | P.\varepsilon | E | \varepsilon | void \rangle$
+\item Uebergaenge
+    \begin{tabbing}
+    $\Delta$ \= $\langle W | S | \varepsilon | E | A | void \rangle :=$ \\
+             \> $\langle W | S | \varepsilon | E | A | \text{``terminated successfully''} \rangle$
+    \end{tabbing}
+
+    Fehler-Uebergaenge:
+    \begin{tabbing}
+    $\Delta$ \= $\langle W | S | \underline{read}.K.\varepsilon | \varepsilon | A | void \rangle :=$ \\
+             \> $\langle W | S | \underline{read}.K.\varepsilon | \varepsilon | A | 
+             \text{``fehler: lesen von leerer eingabedatei''} \rangle$
+    \end{tabbing}
+    \ldots
+\end{enumerate}
 
 \section*{Aufgabe 3}
 anfuegen an $3.$
