@@ -43,6 +43,7 @@ ausfuehrung der leere Kontroll-Keller:
 >   where run ([s], []) = s
 >         run m = run $ delta m
 
+
 b) Reduktionssemantik
 
 da die sprache kein konzept von zustand hat, koennenen wir logischen
@@ -65,14 +66,54 @@ Die semantik ist dabei wie folgt deffiniert
 > eval la = s
 >   where s = reduce la
 
-c)
+c) Aequivalenzbeweis
+
+Da weder Zustand noch Schleifen vorhanden sind, kann die Aequivalentz ueber
+strukturelle Induktion ueber den Ausdrucksbaum bewiesen werden.
+
+Es ist zu zeigen, dass eval l = o l fuer alle Logischen Ausdrucke l.
+Es recht aus Folgendes zu zeigen:
+    reduce l = b 
+ gdw. 
+    delta ([], l:c) = delta ([b], c)
+Aus der definition von eval bzw. o folgt draus die Aquevalentz der Semantik.
+
+IB: Behauptung gild fuer Bleatter im Syntax-Baum
+    einziges Blatt ist (B Bool), und es gilt:
+      reduce (B b) = b
+      delta([], C (L b):c) = delta([b], c)
+
+IA: fuer Teilbaume eines Knotens im Syntax-Baum gilt:
+    delta ([], l:c) -> delta ([b], c)
+        mit b = reduce l
+
+IS: Fall 1: (Not l)
+      reduce (Not l) = not $ reduce l = not b = b'
+      delta ([], Not l:c) 
+        -> delta ([], l:CNot:c)
+        -> delta ([b], CNot:c) -- nach IA
+        -> delta ([not b], c)  -- def dleta
+        -> delta ([b'], c)
+            mit b' = reduce (Not l)
+      qed.
+
+    Fall 2: (l1 :&: l2)
+      reduce (l1 :&: l2) = (reduce l1) && (reduce l2) = b1 && b2 = b'
+      delta ([], (l1 :&: l2):c) 
+        -> delta ([], l1:l2:CAnd:c)
+        -> delta ([b1], l2:CAnd:c) -- nach IA
+        -> delta ([b1,b2], CAnd:c) -- nach IA
+        -> delta ([b1 && b2], c)   -- def dleta
+        -> delta ([b'], c)
+            mit b' = reduce (l1 :&: l2)
+      qed
+
+    Fall 3: analog
 
 
 Aufgabe 4
 ~~~~~~~~~
 
-> example = Not (L True) :|: L True :&: L False
+> example = Not (B True) :|: B True :&: B False
 > -- eval example
-> -- o example
-
-
+> -- o    example
