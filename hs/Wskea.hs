@@ -3,13 +3,12 @@ module Wskea where
 import While 
 
 data Control
-    = T Term
+    = E Expr
+    | T Term
     | L Logical
-    | E Expr
-    | I Int
     | Op (Int -> Int -> Int)
-    | LNot
     | LOp (Int -> Int -> Bool)
+    | LNot
     | Assign | Branch | Loop | Out
 
 data Stack
@@ -33,6 +32,7 @@ delta (        w, s, T (S x):k, e, a) =
 
 delta (w, s, T         (t1:+:t2):k, e, a) = 
       (w, s, T t1:T t2:Op (+)   :k, e, a)
+
 delta (w, s, T         (t1:-:t2):k, e, a) = 
       (w, s, T t1:T t2:Op (-)   :k, e, a)
 delta (w, s, T         (t1:*:t2):k, e, a) = 
@@ -42,8 +42,8 @@ delta (w, s, T         (t1:/:t2):k, e, a) =
 delta (w, s, T         (t1:%:t2):k, e, a) = 
       (w, s, T t1:T t2:Op mod   :k, e, a)
 
-delta (  V n2  : V n1 :w, s, Op op:k, e, a) = 
-      (V ( n1 `op` n2):w, s,       k, e, a)
+delta (  V n2 : V n1 :w, s, Op op:k, e, a) = 
+      (V (n1 `op` n2):w, s,       k, e, a)
 
 delta (    w, s, T ReadT:k, Cn n:e, a) = 
       (V n:w, s,         k,      e, a)
