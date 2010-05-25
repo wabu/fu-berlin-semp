@@ -1,0 +1,45 @@
+\include{headerueb}
+\include{header}
+\include{info}
+
+
+\newcommand{\nr}{5}
+
+\begin{document}
+\section*{Aufgabe 1}
+$\C{\text{read }I} z = 
+\begin{cases}
+    \text{Fehler} & \text{falls $e=\varepsilon$ oder $e=b.e'$} 
+\\
+    (s[n/I], e', a) & \text{falls $e=n.e'$}
+\end{cases}$
+
+\section*{Aufgabe 2}
+$\C{\text{for } I:=T \text{ to } N \text{ do } C} z = 
+\begin{cases}
+    \C{\bar{C}} z' & \text{falls $T<N$,
+                           wobei $z' = \C{C}(s[T/I],e,a)$,
+                           $\bar{C}=\text{for } I:=\underline{T+1} \text{ to } N \text{ do }$
+                        } 
+\\
+    z & \text{falls $T=N$} 
+\\
+    \text{Fehler} & \text{sonst}
+\end{cases}$
+
+\section*{Aufgabe 3}
+
+\section*{Aufgabe 4}
+
+$$\frac
+    { \{true\} x:=7 \{x=7\}, \{x=7\} y:=x+3 \{y=10\} }
+    { \{true\} x:=7; y:=x+3 \{y=10\} }
+$$
+
+$\{true\} x:=7 \{x=7\}$ gilt nach definition von $:=$,\\
+$\{x=7\} y:=x+3 \{y=10\}$ gilt nach definition von $:=$
+\qed
+
+\section*{Aufgabe 6}
+
+\end{document}
