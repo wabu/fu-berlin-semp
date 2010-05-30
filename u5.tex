@@ -1,0 +1,49 @@
+\include{headerueb}
+\include{header}
+\include{info}
+
+
+\newcommand{\nr}{5}
+
+\begin{document}
+\section*{Aufgabe 1}
+$\C{\text{read }I} z = 
+\begin{cases}
+    \text{Fehler} & \text{falls $e=\varepsilon$ oder $e=b.e'$} 
+\\
+    (s[n/I], e', a) & \text{falls $e=n.e'$}
+\end{cases}$
+
+\section*{Aufgabe 2}
+$\C{\text{for } I:=T \text{ to } N \text{ do } C} z = 
+\begin{cases}
+    \C{\bar{C}} z' & \text{falls $T<N$,
+                           wobei $z' = \C{C}(s[T/I],e,a)$,
+                           $\bar{C}=\text{for } I:=\underline{T+1} \text{ to } N \text{ do }$
+                        } 
+\\
+    z & \text{falls $T=N$} 
+\\
+    \text{Fehler} & \text{sonst}
+\end{cases}$
+
+\section*{Aufgabe 3}
+
+$\B{\text{eof}} z = \begin{cases}
+    (\text{wahr},z) & \text{falls $z = (s,\varepsilon,a)$} \\
+    (\text{falsch},z) & \text{sonst}
+\end{cases}$
+
+\section*{Aufgabe 4}
+
+aus $A.5$:
+$$\frac
+    { \{true\} x:=7 \{x=7\}, \{x=7\} y:=x+3 \{y=10\} }
+    { \{true\} x:=7; y:=x+3 \{y=10\} }
+$$
+
+$\{true\} x:=7 \{x=7\}$ und $\{x=7\} y:=x+3 \{y=10\}$ gelten nach $A.2$
+
+\section*{Aufgabe 6}
+
+\end{document}
