@@ -1,0 +1,45 @@
+\include{headerueb}
+\include{header}
+\include{info}
+
+
+\newcommand{\nr}{8}
+
+\begin{document}
+\section*{Aufgabe 1}
+
+\begin{eqnarray}
+(\lambda x . y) z& \overset\beta\to & y\\
+\downarrow^{\alpha'}&&\\
+(\lambda y . y) z& \overset\beta\to & z
+\end{eqnarray}
+
+\section*{Aufgabe 2}
+\begin{eqnarray}
+(\lambda x . \lambda y . x) y  & \overset{\alpha,\beta}\to & \lambda z . y\\
+\downarrow^{\beta'}&\\
+\lambda y . y &&
+\end{eqnarray}
+
+\section*{Aufgabe 3}
+\begin{equation}
+(\lambda x . x x x)(\lambda x . x x x)
+\end{equation}
+
+\section*{Aufgabe 4}
+\begin{enumerate}[a)]
+\item \begin{equation}
+\lambda F x . F;F;F x : [D \to D] \to D \to D
+\end{equation}
+
+\item \begin{equation}
+\lambda L g . \langle g; \pi_1 L, g; \pi_2 L, g; \pi_3 L, g; \pi_4 L \rangle : D^* \to [D \to D] \to D^*
+\end{equation}
+
+\item \begin{equation}
+\lambda f . \lambda \langle x,y \rangle . f x y : [D \to D \to D] \to [(D \times D) \to D]
+\end{equation}
+
+\end{enumerate}
+
+\end{document}
