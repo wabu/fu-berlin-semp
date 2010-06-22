@@ -1,0 +1,24 @@
+\include{headerueb}
+\include{header}
+\include{info}
+
+
+\newcommand{\nr}{9}
+
+\begin{document}
+\section*{Aufgabe 1}
+\begin{enumerate}[(i)]
+    \item $\lambda f x . (f x) + 1 : [D \to \N_\bot] \to D \to \N_\bot$
+    \item $\lambda (x,y) f . f x y : D_1 \times D_2 \to [D_1 \to D_2 \to D_3] \to D_3$
+    \item $\lambda f . (f \lambda y . y) : [ [ D_1 \to D_1 ] \to D_2 ] \to D_2 $
+\end{enumerate}
+
+\section*{Aufgabe 2}
+\begin{enumerate}[(i)]
+\item $\text{lit}: [D_1 \to D_2] \to D_2^{*} \to D_1 \to D_2$
+\item $\text{lit} = \lambda f l x . (\text{null } l) \to x , f (\text{head } l) (\text{lit} f (\text{tail } l)  x) $
+\item $\lambda f l x . lit (\lambda x' b. (x' == x) \lor b) \text{ wahr}$
+\item $\text{lit} = \lambda f l x . (\text{null } l) \to x , \text{lit} f (\text{tail } l) (f (\text{head } l) x)) : [D_1 \to D_2] \to D_1 \to D_2^{*} \to D_2$
+\end{enumerate}
+
+\end{document}
