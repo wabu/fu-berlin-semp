@@ -1,0 +1,42 @@
+\include{headerueb}
+\include{header}
+\include{info}
+
+
+\newcommand{\nr}{11}
+
+\begin{document}
+\section*{Aufgabe 1}
+\begin{verbatim}
+z = read;
+n = read;
+c = 0;
+while z>0 do
+    c = c+1;
+    z = z-n;
+output n
+\end{verbatim}
+
+\newpage
+
+\section*{Aufgabe 2}
+\begin{equation}
+\C{\text{for}(C_1, B, C_2) C} = \C{C_1} (\B{ B } \text{cond}\langle \C{C; C_2; \text{for}(\text{skip},B,C_2)C} , id\rangle )
+\end{equation}
+oder
+\begin{equation}
+\C{\text{for }I = T_1 \text{ to } T_2 \text{ do } C} = 
+\T{T_1} \lambda n_1 . \T{T_2} \lambda n_2 \lambda \langle s,e,a\rangle . \text{cond}\langle \C{C ; \text{for }I = n_1+1 \text{ to } n_2 \text{ do } C} \langle s[n_1/I],e,a\rangle, \text{id}\rangle (n_1\leq n_2)
+\end{equation}
+
+\section*{Aufgabe 3}
+Da bei eine Fehler direkt abgebrochen werden kann, muss dieser nicht durch mehrere Funktionen geschleift werden.
+
+\section*{Aufgabe 4}
+$( (\lambda z. z) * \pi_3 )$ ist vom Typ $ \text{Zustand} \to \text{Ausgabe}+\text{Fehler}_\bot)$, also entspricht nicht dem Typ Fortsetzung.
+$\pi_3$ darf als erst spaeter angewandt werden.
+
+\section*{Aufgabe 5}
+Siehe \url{http://www.inf.fu-berlin.de/lehre/SS10/Semantik/Aufgaben/while.hs}
+
+\end{document}

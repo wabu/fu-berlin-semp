@@ -1,0 +1,37 @@
+\include{headerueb}
+\include{header}
+\include{info}
+
+
+\newcommand{\nr}{10}
+
+\begin{document}
+
+\section*{Aufgabe 1}
+Anfang auf Schmierzettel gerechnet, komplett schoen Aufschreiben ist uns zu aufwendeig 
+und fuer ein Lambda-Interpretor, der Latex-Code als Debug-Ausgabe ausgibt, ist das Wetter zu schoen :-P
+
+\section*{Aufgabe 2}
+\begin{enumerate}[a)]
+\item $\B{B_1 \lor B_2} = \B{B_1} * \lambda b_1 . \B{B_2} * \lambda b_2 z . \langle b_1 \lor b_2 , z \rangle$
+   \\ $\B{B_1 \land B_2} = \B{B_1} * \lambda b_1 . \B{B_2} * \lambda b_2 z . \langle b_1 \land b_2 , z \rangle$
+\item $\C{\text{repeat } C_1 \text{ until } B} = \C{C_1} * \C{\text{while } B \text{ do } C_1}$
+\item $\T{I++} \langle s, e, a \rangle = s I = \text{frei} \to \text{Fehler}_{\bot}, \langle s I,\langle s[(s I + 1)/I]\rangle\rangle$
+   \\ $\T{++I} \langle s, e, a \rangle = s I = \text{frei} \to \text{Fehler}_{\bot}, \langle s I + 1,\langle s[(s I + 1)/I]\rangle\rangle$
+   \\ $\T{+T} = \T{T}$
+   \\ $\T{-T} = \T{T} * \lambda n z \to \langle -n, z \rangle$
+\end{enumerate}
+
+
+\section*{Aufgabe 3}
+$*$ ist in Haskell dem $==<$ (join) des Error/Maybe/Either Monaden sehr
+aehnlich, allerdings ist die Typisierung und die Benutzungsweise leicht
+unterschiedlich.
+
+Will man $*$ genau abbilden, muesste man den Operator in einer neue
+Typklasse declarieren und diese Klasse implementieren. 
+Fuer Primitive wie auch fuer Listen ist dies einfach, 
+die Implementation fuer Tuple bzw. der Curry-Variante ist nicht
+generisch moeglich und muss fuer jede Laenge einzelnd implementiert werden.
+
+\end{document}
